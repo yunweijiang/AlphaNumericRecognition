@@ -1,5 +1,10 @@
 # ANRecognitionSystem
-                      accepted criteria       current progress
-  - single digit:                    90%                     96%
-  - single alphabet:                    75%                     92%
-  - sequence:                    50%                     0%
+###accepted criteria
+  - single digit:			90%                    
+  - single alphabet:  75%                     
+  - sequence:         50%
+
+###current progress
+  - single digit:			96%                    
+  - single alphabet:  92%                     
+  - sequence:         0%
