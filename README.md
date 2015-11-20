@@ -11,5 +11,6 @@
 
 ####notes:
   1. currently the test (along with results) are performed in the main function under Reader.scala
-  2. sequence recognition needs further work
-  3. will be transforming the whole project into sbt
+  2. sequence recognition needs additional work
+  3. overall performance can be further enhanced ("var" problems specificly)
+  4. will be transforming the whole project into sbt
