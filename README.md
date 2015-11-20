@@ -14,3 +14,4 @@
   2. sequence recognition needs additional work
   3. overall performance can be further enhanced ("var" problems specificly)
   4. will be transforming the whole project into sbt
+  5. training and testing pics are not included here due to the volume
