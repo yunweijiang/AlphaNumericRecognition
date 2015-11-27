@@ -5,13 +5,21 @@
   - sequence:         50%
 
 ###current progress
-  - single digit:			        97.8%                    
-  - single alphabet:          92.3%   -> a combined single accuracy of 93.8%               
-  - sequence:(2 characters)   75%
-             (3 characters)   75%
-             (4 characters)   70%
-             (5 characters)   60%
-             (6 characters)   55%     -> a combined sequence accuray of 67%
+  - single characters:
+  
+    digit | alphabet
+    ----- | --------
+    97.8% | 92.3%
+
+    :arrow_right: a combined single accuracy of 93.8%
+
+  - sequence: 
+  
+    2 characters | 3 characters | 4 characters | 5 characters | 6 characters
+    ------------ | ------------ | ------------ | ------------ | ------------
+    75% | 75% | 70% | 60% | 55%
+    
+    :arrow_right: a combined sequence accuray of 67%
 
 ####notes:
   1. training and testing pics are not included here due to the volume
