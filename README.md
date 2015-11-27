@@ -5,13 +5,15 @@
   - sequence:         50%
 
 ###current progress
-  - single digit:			96%                    
-  - single alphabet:  92%                     
-  - sequence:         0%
+  - single digit:			        97.8%                    
+  - single alphabet:          92.3%   -> a combined single accuracy of 93.8%               
+  - sequence:(2 characters)   75%
+             (3 characters)   75%
+             (4 characters)   70%
+             (5 characters)   60%
+             (6 characters)   55%     -> a combined sequence accuray of 67%
 
 ####notes:
-  1. currently the test (along with results) are performed in the main function under Reader.scala
-  2. sequence recognition needs additional work
-  3. overall performance can be further enhanced ("var" problems specificly)
-  4. will be transforming the whole project into sbt
-  5. training and testing pics are not included here due to the volume
+  1. training and testing pics are not included here due to the volume
+  2. total accuracy meets criteria, might even be further enhanced it time allowed
+  3. some pattern detecting into the "inaccurate" part can be conducted
