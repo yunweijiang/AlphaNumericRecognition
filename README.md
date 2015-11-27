@@ -19,7 +19,7 @@
     ------------ | ------------ | ------------ | ------------ | ------------
     75% | 75% | 70% | 60% | 55%
     
-    :arrow_right: a combined sequence accuray of 67%
+    :arrow_right: a combined sequence accuracy of 67%
 
 ####notes:
   1. training and testing pics are not included here due to the volume
