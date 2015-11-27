@@ -1,0 +1,4 @@
+/* original testing images for single digits && alphabets
+ * 18 test sample for each character, 648 in all
+ * following the ML rule of 5(p-2)
+ */
