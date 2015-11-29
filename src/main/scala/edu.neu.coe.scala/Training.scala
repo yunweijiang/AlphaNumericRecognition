@@ -8,7 +8,7 @@ import java.util.Arrays
 import java.util.ArrayList
 import java.math._
 import java.util.{HashMap => JHashMap}
-import scala.reflect.internal.util.Collections
+//import scala.reflect.internal.util.Collections
 
 /*
  * most efficient version
