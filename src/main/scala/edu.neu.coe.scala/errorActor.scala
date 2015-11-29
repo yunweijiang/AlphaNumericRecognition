@@ -1,5 +1,6 @@
 package edu.neu.coe.scala
-import actors._, Actor._
+import scala.actors._
+import scala.actors.Actor._
 
 
 case class digitError(number: Int)
