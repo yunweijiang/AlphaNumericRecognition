@@ -139,4 +139,5 @@ def writeFile(imageSeq:IndexedSeq[IndexedSeq[Int]], path:String,folder:String,To
       color.getRed() + color.getGreen() + color.getBlue();
     }
   
+
 }
