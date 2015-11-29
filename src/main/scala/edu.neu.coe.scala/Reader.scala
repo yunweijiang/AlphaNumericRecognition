@@ -6,8 +6,12 @@ import scala.collection.mutable.ArrayBuffer
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.util.Date
-import actors._, Actor._
+import scala.actors._
+import scala.actors.Actor._
 import java.util.{HashMap => JHashMap}
+//import com.github.tototoshi.csv._
+import scala.collection.JavaConversions._
+
 object Reader extends App
 {
     
@@ -100,23 +104,30 @@ object Reader extends App
           if (classifierResult.!=(classNumber))
           {
               err ! totalError(1)
-              err ! (if(classNumber.isDigit) digitError(1) else letterError(1))
+              err ! (
+                  if(classNumber.isDigit) {
+                    dataArray.append("digit"+','+classifierResult+','+classNumber+'\n')
+                    digitError(1)
+                  } else {
+                    dataArray.append("letter"+','+classifierResult+','+classNumber+'\n')
+                    letterError(1)
+                    })
           }
       }
         err ! getDigitError(self)
         receive
         {
-          case result:Int =>println("Total number of digit errors is "+result+" out of " + digitSample.length + ", digit error rate ="+ roundAt(2)((result)*1.0/digitSample.length) + ", and corresponding accuracy ratio is " + roundAt(1)(100-(result)*100.0/digitSample.length) + "%.")
+          case result:Int =>println("Total number of digit errors is "+result+" out of " + digitSample.length + ", digit error rate = "+ roundAt(2)((result)*1.0/digitSample.length) + ", and corresponding accuracy ratio is " + roundAt(1)(100-(result)*100.0/digitSample.length) + "%.")
         }
         err ! getLetterError(self)
         receive
         {
-          case result:Int =>println("Total number of letter errors is "+result+" out of " + letterSample.length + ", letter error rate ="+ roundAt(2)((result)*1.0/letterSample.length) + ", and corresponding accuracy ratio is " + roundAt(1)(100-(result)*100.0/letterSample.length) + "%.")
+          case result:Int =>println("Total number of letter errors is "+result+" out of " + letterSample.length + ", letter error rate = "+ roundAt(2)((result)*1.0/letterSample.length) + ", and corresponding accuracy ratio is " + roundAt(1)(100-(result)*100.0/letterSample.length) + "%.")
         }
         err ! getTotalError(self)
         receive
         {
-           case result:Int =>println("Total number of errors combined is "+result+" out of " + testArr.length + ", error rate =" + roundAt(2)((result)*1.0/testArr.length) + ",and corresponding accuracy ratio is " + roundAt(1)(100-(result)*100.0/testArr.length) + "%.")
+           case result:Int =>println("Total number of errors combined is "+result+" out of " + testArr.length + ", error rate = " + roundAt(2)((result)*1.0/testArr.length) + ",and corresponding accuracy ratio is " + roundAt(1)(100-(result)*100.0/testArr.length) + "%.")
         } 
         err ! terminate(self)
     }
@@ -144,12 +155,19 @@ object Reader extends App
            if(!classifierResult.equalsIgnoreCase(classNumber))
            {
                errorCount.append(errorCount.last+1)
+               for(i<-0 to classNumber.length-1;if classifierResult(i) != classNumber(i)) yield {dataArray.append("sequence"+','+classifierResult(i)+','+classNumber(i))}
            }
          }
         println("Total number of errors is "+errorCount.last + " out of " + seqSize + ".")
-        println("Total error rate is:"+roundAt(2)(errorCount.last*1.0/seqSize) +".")
-        println("Corresponding accuracy ratio is:" + roundAt(1)(100-errorCount.last*100.0/seqSize) + "%.")
+        println("Total error rate is "+roundAt(2)(errorCount.last*1.0/seqSize) +".")
+        println("Corresponding accuracy ratio is " + roundAt(1)(100-errorCount.last*100.0/seqSize) + "%.")
     }
+    
+    def printToCSVFile(f: String)(op: java.io.PrintWriter => Unit) {
+  		val p = new java.io.PrintWriter(new File(System.getProperty("user.dir")+"/src/"+f))
+  		try { op(p) } finally { p.close() }
+		}
+    
     def recognition():Unit=
     {
        val start=new Date();
@@ -166,7 +184,10 @@ object Reader extends App
        val end=new Date()
        println(end)
        println("from "+start+" to "+end)
+		   printToCSVFile("main/resources/data.csv")(p => {dataArray.foreach(p.println)})
     }
+    val dataArray = new ArrayBuffer[String]()
+    dataArray.append("category,classified result,actual class\n")
     recognition()    
 }
 
