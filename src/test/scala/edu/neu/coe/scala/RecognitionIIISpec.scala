@@ -5,9 +5,7 @@ import edu.neu.coe.scala._
 
 import java.io.File
 import java.util.{HashMap => JHashMap}
-/**
- * @author Administrator
- */
+
 class RecognitionIIISpec extends FlatSpec with Matchers{
     "allFiles(\"images\")" should "have 3600 files" in
     {
