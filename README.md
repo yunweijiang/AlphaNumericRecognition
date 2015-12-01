@@ -23,5 +23,6 @@
 
 ####notes:
   1. training and testing pics are not included here due to the volume
-  2. total accuracy meets criteria, might even be further enhanced it time allowed
-  3. some pattern detecting into the "inaccurate" part can be conducted
+  2. total accuracy meets criteria
+  3. both arraybuffer && actor version are included under the src directory
+  4. further data analysis on the results (output into csv file) is conducted on Zeppelin
