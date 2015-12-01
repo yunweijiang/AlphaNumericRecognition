@@ -2,7 +2,6 @@ package edu.neu.coe.scala
 import scala.actors._
 import scala.actors.Actor._
 
-
 case class renewSumB(number:Float)
 case class getSumB(sender:Actor)
 case class renewWB(number:Int)

@@ -2,7 +2,6 @@ package edu.neu.coe.scala
 import scala.actors._
 import scala.actors.Actor._
 
-
 case class digitError(number: Int)
 case class getDigitError(sender: Actor)
 case class letterError(number: Int)
