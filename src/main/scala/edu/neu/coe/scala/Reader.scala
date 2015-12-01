@@ -106,10 +106,10 @@ object Reader extends App
               err ! totalError(1)
               err ! (
                   if(classNumber.isDigit) {
-                    dataArray.append("digit"+','+classifierResult+','+classNumber+'\n')
+                    dataArray.append("digit"+','+classifierResult+','+classNumber)
                     digitError(1)
                   } else {
-                    dataArray.append("letter"+','+classifierResult+','+classNumber+'\n')
+                    dataArray.append("letter"+','+classifierResult+','+classNumber)
                     letterError(1)
                     })
           }
@@ -187,7 +187,7 @@ object Reader extends App
 		   printToCSVFile("main/resources/data.csv")(p => {dataArray.foreach(p.println)})
     }
     val dataArray = new ArrayBuffer[String]()
-    dataArray.append("category,classified result,actual class\n")
+    dataArray.append("category,classified result,actual class")
     recognition()    
 }
 

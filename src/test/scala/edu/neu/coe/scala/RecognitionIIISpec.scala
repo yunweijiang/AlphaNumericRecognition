@@ -1,4 +1,5 @@
 package edu.neu.coe.scala
+
 import org.scalatest.{ FlatSpec, Matchers }
 import edu.neu.coe.scala._
 
@@ -7,7 +8,7 @@ import java.util.{HashMap => JHashMap}
 /**
  * @author Administrator
  */
-class RecognitionSpec extends FlatSpec with Matchers{
+class RecognitionIIISpec extends FlatSpec with Matchers{
     "allFiles(\"images\")" should "have 3600 files" in
     {
       val len:Int= Training.allFiles(new File(System.getProperty("user.dir")+"/src/main/resources/images")).length
@@ -56,4 +57,29 @@ class RecognitionSpec extends FlatSpec with Matchers{
     {
        Process.isWhite(0x3CB371) shouldBe true//0x3CB371 is springGreen
     }
+    "imageToText(\"test/resources/specImages\",\"test/resources/specText\")" should "be false" in
+    {
+      Reader.imageToText("test/resources/specImages","000.png","test/resources/specText") shouldBe false
+    }
+    
+     "imageToText(\"test/resources/specImages\",\"test/resources/specText\")" should "be true" in
+    {
+      Reader.imageToText("test/resources/specImages","001.png","test/resources/specText") shouldBe true
+    }
+     
+     "sequenceToVector(\"000.txt\",test/resources/specText)" should "have a length of 1024" in
+     {
+       Reader.sequenceToVector("000.txt", "test/resources/specText").length shouldBe 1024
+     }
+     
+      "sequenceToVector(\"00.txt\",test/resources/specText)" should "have a length of 2048" in
+     {
+       Reader.sequenceToVector("00.txt", "test/resources/specText").length shouldBe 2048
+     }
+      
+      "getTrainingResult()" should "have only one key and one value" in
+      {
+        val size=Reader.getTrainingResult().size()
+        size shouldBe 1
+      }
 }

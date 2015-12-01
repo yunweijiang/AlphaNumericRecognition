@@ -17,6 +17,9 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies += "org.scala-lang" % "scala-actors" % "2.11.6"
+
+//scalacOptions += "-deprecation"
+
 /*
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
