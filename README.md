@@ -25,4 +25,4 @@
   1. training and testing pics are not included here due to the volume
   2. total accuracy meets criteria
   3. both arraybuffer && actor version are included under the src directory
-  4. further data analysis on the results (output into csv file) is conducted on Zeppelin
+  4. further data analysis on the results (output into csv file) is conducted on Zeppelin (shared the .json version of our notebook, you might need json editors like http://jsoneditoronline.org/ to save the .json file locally in order to import into Zeppelin)
