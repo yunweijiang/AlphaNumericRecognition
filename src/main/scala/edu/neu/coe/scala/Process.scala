@@ -6,9 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import scala.collection.mutable.ArrayBuffer
-object Process {
-   def getThreshold(gray:IndexedSeq[IndexedSeq[Int]],w:Int, h:Int):Int=
-  {
+import actors._, Actor._
+
+object Process 
+{
+   def getThreshold(gray:IndexedSeq[IndexedSeq[Int]],w:Int, h:Int,pa:ProcessActor):Int=
+   {
       val histData=new Array[Int](w*h);
       for (x<-0 to w-1) 
       {
@@ -17,48 +20,49 @@ object Process {
           histData(red)=histData(red)+1
         }
       }
-
+      pa.start();
       val total:Int = w * h
       val sum=(for{i<- 0 to 255}yield{i*histData(i)}).sum
-      
-      val sumB=new ArrayBuffer[Float]()
-      sumB.append(0)
-      val wB=new ArrayBuffer[Int]()
-      wB.+=(0)
-      val wF=new ArrayBuffer[Int]()
-      wF.+=(0)
+
+
       val varMax=new ArrayBuffer[Float]
       varMax.+=(0)
       val threshold = new ArrayBuffer[Int];
       for (t<- 0 to 255) 
       {
-        wB.+=(wB.last+histData(t))// Weight Background
-        wB.last!=0 match
+        pa ! renewWB(histData(t))
+        val wB:Int={pa ! getWB(self)
+          receive{case result:Int=>result; case _=>0}}
+        if(wB.!=(0))
         {
-          case true=>
-            wF.+=(total - wB.last)
-            wF!=0 match
+            //wF.+=(total - wB)
+            val wF=total-wB
+            if(wF!=0)
             {
-              case true=>
-                 val newSumB=sumB.last+(t * histData(t)).toFloat
-                 sumB.append(newSumB)
-                 val mB = sumB.last / wB.last; // Mean Background
-                 val mF = (sum - sumB.last) / wF.last; // Mean Foreground
+                 pa ! renewSumB(t * histData(t))
+                 val sumB:Float={pa ! getSumB(self)
+                   receive
+                   {
+                   case result:Float=>result
+                   case _ =>0
+                   }}
+                 //sumB.append(sumB.last+(t * histData(t)).toFloat)
+                 val mB = sumB / wB; // Mean Background
+                 val mF = (sum - sumB) / wF; // Mean Foreground
                     // Calculate Between Class Variance
-                 val varBetween = wB.last * wF.last* (mB - mF) * (mB - mF);
-                 varBetween > varMax.last match
+                 val varBetween = wB * wF* (mB - mF) * (mB - mF);
+                 if(varBetween > varMax.last)
                  {
-                   case true=> varMax.+=(varBetween)
-                               threshold.+=(t)
-                   case false=>
-                 }
-              case false=>  
+                   varMax.+=(varBetween)
+                   threshold.+=(t)
+                 } 
             }
-          case false=>
         }
       }
+      pa ! stop(self)
       threshold.last
   }
+   
   def getImageFile(folder:String,path: String, ToPath:String): Boolean=
   {
         val bufferedImage = ImageIO.read(new File(path))
@@ -69,7 +73,7 @@ object Process {
             (((bufferedImage.getRGB(x, y)>>16)&0xFF)*77+((bufferedImage.getRGB(x, y) >> 8)& 0xFF)*150+((bufferedImage.getRGB(x, y) >> 0) & 0xFF)*29+128)>>8
           }
         }
-        val threshold = getThreshold(gray, w, h);
+        val threshold = getThreshold(gray, w, h,new ProcessActor());
         val binaryBufferedImage = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_BINARY)
         for (x<- 0 until w) 
         {
@@ -96,7 +100,7 @@ object Process {
     writeFile(imageSeq,path,folder,ToPath)
   }
   
-def writeFile(imageSeq:IndexedSeq[IndexedSeq[Int]], path:String,folder:String,ToPath:String):Boolean=
+  def writeFile(imageSeq:IndexedSeq[IndexedSeq[Int]], path:String,folder:String,ToPath:String):Boolean=
   {
     val filePath=path.substring(0,path.indexOf("/"+folder))+"/"+ToPath+"/"+new File(path).getName.substring(0, new File(path).getName.indexOf(".png"))+".txt"
    
@@ -112,31 +116,29 @@ def writeFile(imageSeq:IndexedSeq[IndexedSeq[Int]], path:String,folder:String,To
         out.close()
         true
    }
-    false
+    else
+      false
   }
   
   def isBlack(colorInt: Int):Boolean ={
     val color = new Color(colorInt);
     (color.getRed() + color.getGreen() + color.getBlue())<=300
-    }
+  }
 
-   def isWhite(colorInt: Int):Boolean ={
-      val color = new Color(colorInt);
-      (color.getRed() + color.getGreen() + color.getBlue())>300
-    }
+  def isWhite(colorInt: Int):Boolean ={
+    val color = new Color(colorInt);
+    (color.getRed() + color.getGreen() + color.getBlue())>300  
+  }
 
-    def isBlackOrWhite(colorInt: Int):Int =
-    {
-      if(getColorBright(colorInt) < 30 ||getColorBright(colorInt) > 730)
-        1
-      else 
-        0
-    }
+  def isBlackOrWhite(colorInt: Int):Int ={
+    if(getColorBright(colorInt) < 30 ||getColorBright(colorInt) > 730)
+      1
+    else 
+      0   
+  }
 
-    def getColorBright(colorInt: Int): Int =
-    {
-      val color = new Color(colorInt);
-      color.getRed() + color.getGreen() + color.getBlue();
-    }
-  
+  def getColorBright(colorInt: Int): Int ={
+    val color = new Color(colorInt);
+    color.getRed() + color.getGreen() + color.getBlue();
+  }
 }

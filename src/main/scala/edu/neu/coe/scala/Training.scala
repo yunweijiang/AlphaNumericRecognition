@@ -7,12 +7,14 @@ import scala.collection.mutable.ArrayBuffer
 import java.util.Arrays
 import java.util.ArrayList
 import java.math._
-import java.util.{HashMap => JHashMap}
+import java.util.HashMap
 //import scala.reflect.internal.util.Collections
+
 /*
  * most efficient version
  */
 object Training {
+  type CharArray2D=Array[Array[Char]]
   /*****get all files******/
   def allFiles(dir: File): Iterator[File]=
   {
@@ -40,7 +42,8 @@ object Training {
      }
      p
   }
-  def classfy(X:Array[Char], dataSet: Array[Array[Char]],labels:ArrayBuffer[Char], k:Int):Character=
+  
+  def classfy(X:Array[Char], dataSet: CharArray2D,labels:ArrayBuffer[Char], k:Int):Character=
   {
     val dataSetSize=dataSet.length
     val tmpMat=for{i<- 0 to dataSetSize-1}yield{X}
@@ -52,7 +55,7 @@ object Training {
     val sqDiffMat=diffMat.map { x => x.map { y => y*y } }
     val sqDistances=sqDiffMat.map { x => x.sum }.toArray
     val sortedDistIndicies=argsort(sqDistances,sqDistances.length)   
-    val classCount=new JHashMap[Character,Int]()
+    val classCount=new HashMap[Character,Int]()
     for(i<-0 to k)
     {
       val voteIlabel=labels(sortedDistIndicies(i))
@@ -63,7 +66,7 @@ object Training {
    max(classCount)
   }
   //
-  def max(count:JHashMap[Character,Int]):Character=
+  def max(count:HashMap[Character,Int]):Character=
   {
     val arr=count.values().toArray()
     Arrays.sort(arr)

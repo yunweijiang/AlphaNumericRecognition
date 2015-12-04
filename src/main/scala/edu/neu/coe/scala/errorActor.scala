@@ -8,9 +8,9 @@ case class letterError(number: Int)
 case class getLetterError(sender: Actor)
 case class totalError(number: Int)
 case class getTotalError(sender: Actor)
-
 case class terminate(sender:Actor)
-class errorActor extends Actor
+
+class ErrorActor extends Actor
 {
    override def act(): Unit=process(0,0,0)
    def process(digit: Int, letter:Int,total:Int):Unit= 
