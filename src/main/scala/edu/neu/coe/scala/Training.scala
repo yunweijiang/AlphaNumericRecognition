@@ -63,7 +63,7 @@ object Training {
          classCount.replace(voteIlabel, classCount.get(voteIlabel)+1)
       else classCount.put(voteIlabel, 1)
     }
-   max(classCount)
+    max(classCount)
   }
   //
   def max(count:HashMap[Character,Int]):Character=
