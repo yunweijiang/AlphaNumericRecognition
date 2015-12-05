@@ -25,7 +25,6 @@ object Reader extends App
         val files=Training.allFiles(new File(System.getProperty("user.dir")+"/src/"+fromPath)).toList
        
         files.par.map { x => imageToText(fromPath,x.getName,toPath)}
-  
     }
  
   /*****************Part 2**********************/
@@ -105,23 +104,23 @@ object Reader extends App
     
     def countAllErrors(numOfCharacters:Int,classNumber:String,errorCount:ArrayBuffer[Int],classifierResult:String,err:ErrorActor,digits:ArrayBuffer[Int],letters:ArrayBuffer[Int]):Unit=
     {
-            if(numOfCharacters.!=(1))
-             {
-               errorCount.append(errorCount.last+1)
-               for(i<-0 to classNumber.length-1;if classifierResult(i) != classNumber(i)) yield {dataArray.append("sequence"+','+classifierResult(i)+','+classNumber(i))}
-             }
-             else
-             {
-                 err ! totalError(1)
-                 err ! (
-                  if(classNumber(0).isDigit) {
-                    dataArray.append("digit"+','+classifierResult+','+classNumber)
-                    digitError(1)
-                  } else {
-                    dataArray.append("letter"+','+classifierResult+','+classNumber)
-                    letterError(1)
-                    })
-             }
+        if(numOfCharacters.!=(1))
+        {
+            errorCount.append(errorCount.last+1)
+            for(i<-0 to classNumber.length-1;if classifierResult(i) != classNumber(i)) yield {dataArray.append("sequence"+','+classifierResult(i)+','+classNumber(i))}
+        }
+        else
+        {
+            err ! totalError(1)
+            err ! (
+            if(classNumber(0).isDigit) {
+                dataArray.append("digit"+','+classifierResult+','+classNumber)
+                digitError(1)
+            } else {
+                dataArray.append("letter"+','+classifierResult+','+classNumber)
+                letterError(1)
+            })
+        }         
     }
     
     def printOverallResult(numOfCharacters:Int,errorCount:ArrayBuffer[Int],seqSize:Int,digitSize:Int,letterSize:Int,err:ErrorActor):Unit=
@@ -185,9 +184,9 @@ object Reader extends App
     
     def printToCSVFile(f: String)(op: java.io.PrintWriter => Unit) 
     {
-  		val p = new java.io.PrintWriter(new File(System.getProperty("user.dir")+"/src/"+f))
-  		try { op(p) } finally { p.close() }
-		}
+  	val p = new java.io.PrintWriter(new File(System.getProperty("user.dir")+"/src/"+f))
+  	try { op(p) } finally { p.close() }
+    }
     
     def recognition():Unit=
     {
@@ -205,12 +204,9 @@ object Reader extends App
        val end=new Date()
        println(end)
        println("from "+start+" to "+end)
-		   printToCSVFile("main/resources/data.csv")(p => {dataArray.foreach(p.println)})
+       printToCSVFile("main/resources/data.csv")(p => {dataArray.foreach(p.println)})
     }
     val dataArray = new ArrayBuffer[String]()
     dataArray.append("category,classified result,actual class")
     recognition()    
 }
-
-
-
