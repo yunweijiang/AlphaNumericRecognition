@@ -26,3 +26,7 @@
   2. total accuracy meets criteria
   3. both arraybuffer && actor version are included under the src directory
   4. further data analysis on the results (output into csv file) is conducted on Zeppelin (shared the .json version of our notebook, you might need json editors like http://jsoneditoronline.org/ to save the .json file locally in order to import into Zeppelin)
+  5. in order for any of you who might wanna try out the test file, those that does not require main resources are tagged as "PartialTest", which can be run using:
+    `$ sbt`
+    `> test-only -- -n PartialTest`
+While if sufficient number of images have been put into the main resource folder, you will be able to execute the whole test file simply using `> test`. Remember, you'll need to delete the file `001.txt` under directory `test/resources/specText` (if it was generated from the previous test) before you launch each test.
