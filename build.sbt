@@ -1,4 +1,4 @@
-name := "Recognition"
+name := "ANRecognitionSystem"
 
 version := "0.1-SNAPSHOT"
 
