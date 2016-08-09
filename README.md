@@ -21,7 +21,7 @@
     
     :arrow_right: a combined sequence accuracy of 67%
 
-####notes:
+####notes:LLLLLLL
   1. training and testing pics are not included here due to the volume
   2. total accuracy meets criteria
   3. both arraybuffer && actor version are included under the src directory
